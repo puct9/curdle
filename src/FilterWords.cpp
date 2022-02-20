@@ -61,7 +61,7 @@ void GenerateLookupTable(Words& words)
 
             pos.Filter(guess, colours);
 
-            auto& mask = pos.GetMask();
+            const auto& mask = pos.GetMask();
             for (int answer_n = 0; answer_n < mask.size(); answer_n++)
             {
                 if (mask[answer_n])

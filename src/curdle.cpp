@@ -82,7 +82,6 @@ std::vector<Suggestion> Suggest(cublasHandle_t& cublas, Array2D<float> lookup)
 
 int main()
 {
-
     cublasHandle_t cublas;
     cublasCreate_v2(&cublas);
 

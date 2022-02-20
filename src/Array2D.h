@@ -1,6 +1,7 @@
 #ifndef CU_Array2D_H
 #define CU_Array2D_H
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -30,7 +31,7 @@ public:
     T Get(int r, int c) { return _data[r * _c + c]; }
     void Set(int r, int c, T v) { _data[r * _c + c] = v; }
 
-    void FilterCols(std::vector<bool>& filter)
+    void FilterCols(const std::vector<bool>& filter)
     {
         // We need to know how many columns there will be
         int outC = 0;

@@ -27,7 +27,7 @@ public:
 
     void Equals(float value, Array2D_CUDA* out)
     {
-        vector_eq<float>(_d_data, value, out->_d_data, _r * _c);
+        vector_eq(_d_data, value, out->_d_data, _r * _c);
     }
 
     void SumRowsBLAS(Array2D_CUDA* out, Array2D_CUDA& ones, cublasHandle_t& cublas)
@@ -46,15 +46,15 @@ public:
 
     void AddTo(Array2D_CUDA* out)
     {
-        vector_add<float>(_d_data, out->_d_data, out->_d_data, _r * _c);
+        vector_add(_d_data, out->_d_data, out->_d_data, _r * _c);
     }
 
     void MultiplyScalar(float value)
     {
-        vector_multiply_scalar<float>(_d_data, value, _d_data, _r * _c);
+        vector_multiply_scalar(_d_data, value, _d_data, _r * _c);
     }
 
-    void AddScalar(float value) { vector_add_scalar<float>(_d_data, value, _d_data, _r * _c); }
+    void AddScalar(float value) { vector_add_scalar(_d_data, value, _d_data, _r * _c); }
 
     void CopyToHost(Array2D<float>* out)
     {
