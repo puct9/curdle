@@ -1,0 +1,9 @@
+*
+
+!.clang-format
+!.gitignore
+!README.md
+!build.bat
+
+!/src
+!/src/**
