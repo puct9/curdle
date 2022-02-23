@@ -14,19 +14,19 @@ char Idx2Char(int idx) { return idx + 97; }
 
 std::string WmatToWord(WMAT wmat)
 {
-    char word[5];
+    std::string outWord;
     for (int pos = 0; pos < 5; pos++)
     {
         for (int idx = 0; idx < 26; idx++)
         {
             if (wmat[pos][idx])
             {
-                word[pos] = Idx2Char(idx);
+                outWord += Idx2Char(idx);
                 break;
             }
         }
     }
-    return std::string(word);
+    return outWord;
 }
 
 Words ReadWords()
@@ -37,7 +37,7 @@ Words ReadWords()
     std::ifstream guessFile("wordle_guesses.txt");
     for (std::string word; getline(guessFile, word);)
     {
-        guesses.emplace_back(word.substr(0, 5));
+        guesses.push_back(word);
     }
 
     std::ifstream answerFile("wordle_answers.txt");
@@ -56,7 +56,7 @@ Words ReadWords()
             wordData[pos][idx] = 1;
             wordData[5][idx] += 1;
         }
-        guesses.emplace_back(word.substr(0, 5));
+        guesses.push_back(word);
     }
 
     guessFile.close();

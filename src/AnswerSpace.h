@@ -3,6 +3,7 @@
 
 #include <array>
 #include <math.h>
+#include <string>
 #include <vector>
 
 // 5+1=6, where 5 is num chars and 1 is sum of occurrence of char
