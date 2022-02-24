@@ -121,7 +121,8 @@ int main()
         for (int i = 0; i < 10; i++)
         {
             auto idx = suggestions[i];
-            printf("%s (%f)\n", words.guesses[idx.index].c_str(), idx.expectedEntropyDiff);
+            printf("%s (%f - %f = %f)\n", words.guesses[idx.index].c_str(), answerSpace.entropy(),
+                   -idx.expectedEntropyDiff, answerSpace.entropy() + idx.expectedEntropyDiff);
         }
 
         std::string word;
