@@ -42,17 +42,14 @@ public:
                        k, &zerof, out->_d_data, n);
     }
 
-    void MagicFormula() { vector_times_max1_log2(_d_data, _d_data, _r * _c); }
+    void Log2() { vector_log2(_d_data, _d_data, _r * _c); }
 
-    void AddTo(Array2D_CUDA* out)
+    void ReduceMin(Array2D_CUDA* out)
     {
-        vector_add(_d_data, out->_d_data, out->_d_data, _r * _c);
+        vector_reduce_max(_d_data, out->_d_data, out->_d_data, _r * _c);
     }
 
-    void MultiplyScalar(float value)
-    {
-        vector_multiply_scalar(_d_data, value, _d_data, _r * _c);
-    }
+    void MultiplyScalar(float value) { vector_multiply_scalar(_d_data, value, _d_data, _r * _c); }
 
     void AddScalar(float value) { vector_add_scalar(_d_data, value, _d_data, _r * _c); }
 

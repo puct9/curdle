@@ -38,13 +38,13 @@ std::vector<Suggestion> Suggest(cublasHandle_t& cublas, Array2D<float> lookup)
     Array2D_CUDA lookup_cuda(lookup);
     Array2D_CUDA results_cuda(lookup); // Doesn't really matter we overwrite values anyway
 
-    Array2D<float> weightedEntropy(1, lookup.rows());
-    for (int c = 0; c < weightedEntropy.cols(); c++)
+    Array2D<float> maxEntropy(1, lookup.rows());
+    for (int c = 0; c < maxEntropy.cols(); c++)
     {
-        weightedEntropy.Set(0, c, 0.0f);
+        maxEntropy.Set(0, c, 0.0f);
     }
-    Array2D_CUDA weightedEntropy_cuda(weightedEntropy);
-    Array2D_CUDA rowSums_cuda(weightedEntropy);
+    Array2D_CUDA maxEntropy_cuda(maxEntropy);
+    Array2D_CUDA rowSums_cuda(maxEntropy);
 
     Array2D<float> ones(1, lookup.cols());
     std::fill_n(ones.data(), lookup.cols(), 1.0f);
@@ -57,11 +57,7 @@ std::vector<Suggestion> Suggest(cublasHandle_t& cublas, Array2D<float> lookup)
     {
         lookup_cuda.Equals((float)colour, &results_cuda);
         results_cuda.SumRowsBLAS(&rowSums_cuda, ones_cuda, cublas);
-        if (colour != 242)
-            rowSums_cuda.MagicFormula();
-        else
-            rowSums_cuda.MultiplyScalar(-1.0f);
-        rowSums_cuda.AddTo(&weightedEntropy_cuda);
+        rowSums_cuda.ReduceMin(&maxEntropy_cuda);
     }
 
     auto stop = std::chrono::high_resolution_clock::now();
@@ -72,12 +68,13 @@ std::vector<Suggestion> Suggest(cublasHandle_t& cublas, Array2D<float> lookup)
     printf("Calculated %llu filters in %f ms (%llu filters/s)\n", numFilters, durationMs,
            filtersPerSecond);
 
-    weightedEntropy_cuda.MultiplyScalar(1.0f / lookup.cols());
-    weightedEntropy_cuda.AddScalar(-log2f(lookup.cols()));
+    maxEntropy_cuda.Log2();
+    // maxEntropy_cuda.MultiplyScalar(1.0f / lookup.cols());
+    maxEntropy_cuda.AddScalar(-log2f(lookup.cols()));
 
-    weightedEntropy_cuda.CopyToHost(&weightedEntropy);
+    maxEntropy_cuda.CopyToHost(&maxEntropy);
     // Argsort
-    return sort_indexes(weightedEntropy.data(), weightedEntropy.numel());
+    return sort_indexes(maxEntropy.data(), maxEntropy.numel());
 }
 
 int main()

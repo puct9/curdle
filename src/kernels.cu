@@ -22,37 +22,37 @@ void vector_eq(float* va, float b, float* vc, uint32_t n)
     vector_eq_cuda CK(n_blocks, block_size)(va, b, vc, n);
 }
 
-__global__ void vector_times_max1_log2_cuda(float* va, float* vb, uint32_t n)
+__global__ void vector_log2_cuda(float* va, float* vb, uint32_t n)
 {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n)
     {
         // Magical formula (use 0.5f or 1.0f your choice)
-        vb[tid] = va[tid] * log2f(fmaxf(1.0f, va[tid]));
+        vb[tid] = log2f(va[tid]);
     }
 }
 
-void vector_times_max1_log2(float* va, float* vb, uint32_t n)
+void vector_log2(float* va, float* vb, uint32_t n)
 {
     constexpr int block_size = 256;
     int n_blocks = div_ceil(n, block_size);
-    vector_times_max1_log2_cuda CK(n_blocks, block_size)(va, vb, n);
+    vector_log2_cuda CK(n_blocks, block_size)(va, vb, n);
 }
 
-__global__ void vector_add_cuda(float* va, float* vb, float* vc, uint32_t n)
+__global__ void vector_reduce_max_cuda(float* va, float* vb, float* vc, uint32_t n)
 {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n)
     {
-        vc[tid] = va[tid] + vb[tid];
+        vc[tid] = fmaxf(va[tid], vb[tid]);
     }
 }
 
-void vector_add(float* d_arr, float* d_brr, float* d_out, uint32_t n)
+void vector_reduce_max(float* d_arr, float* d_brr, float* d_out, uint32_t n)
 {
     constexpr int block_size = 256;
     int n_blocks = div_ceil(n, block_size);
-    vector_add_cuda CK(n_blocks, block_size)(d_arr, d_brr, d_out, n);
+    vector_reduce_max_cuda CK(n_blocks, block_size)(d_arr, d_brr, d_out, n);
 }
 
 __global__ void vector_multiply_scalar_cuda(float* va, float b, float* vc, uint32_t n)
