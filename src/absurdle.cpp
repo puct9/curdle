@@ -57,7 +57,7 @@ std::vector<Suggestion> Suggest(cublasHandle_t& cublas, Array2D<float> lookup)
     {
         lookup_cuda.Equals((float)colour, &results_cuda);
         results_cuda.SumRowsBLAS(&rowSums_cuda, ones_cuda, cublas);
-        rowSums_cuda.ReduceMin(&maxEntropy_cuda);
+        rowSums_cuda.ReduceMax(&maxEntropy_cuda);
     }
 
     auto stop = std::chrono::high_resolution_clock::now();

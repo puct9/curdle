@@ -44,7 +44,7 @@ public:
 
     void Log2() { vector_log2(_d_data, _d_data, _r * _c); }
 
-    void ReduceMin(Array2D_CUDA* out)
+    void ReduceMax(Array2D_CUDA* out)
     {
         vector_reduce_max(_d_data, out->_d_data, out->_d_data, _r * _c);
     }
