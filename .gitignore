@@ -6,6 +6,7 @@
 !build.bat
 !build.sh
 !wordle_*.txt
+!lookup.bin
 
 !/src
 !/src/**
