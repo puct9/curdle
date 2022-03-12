@@ -18,10 +18,10 @@ public:
     Array2D(const Array2D<T>& other)
     {
         // Copy constructor
-        _data = new T[other._r * other._c];
-        std::copy_n(other._data, other._r * other._c, _data);
         _r = other._r;
         _c = other._c;
+        _data = new T[_r * _c];
+        std::copy_n(other._data, _r * _c, _data);
     }
 
     T* data() { return _data; }
