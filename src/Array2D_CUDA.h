@@ -25,6 +25,15 @@ public:
         cudaMemcpy(_d_data, ref.data(), ref.numel() * sizeof(float), cudaMemcpyHostToDevice);
     }
 
+    Array2D_CUDA(const Array2D_CUDA& other)
+    {
+        // Copy constructor
+        _r = other._r;
+        _c = other._c;
+        cudaMalloc(&_d_data, _r * _c * sizeof(float));
+        cudaMemcpy(_d_data, other._d_data, _r * _c * sizeof(float), cudaMemcpyDeviceToDevice);
+    }
+
     void Equals(float value, Array2D_CUDA* out)
     {
         vector_eq(_d_data, value, out->_d_data, _r * _c);
