@@ -9,8 +9,8 @@
 class Array2D_CUDA
 {
 private:
-    static float onef;
-    static float zerof;
+    static constexpr float onef = 1.0f;
+    static constexpr float zerof = 0.0f;
 
     float* _d_data;
     int _r;
@@ -73,8 +73,5 @@ public:
 
     ~Array2D_CUDA() { cudaFree(_d_data); }
 };
-
-float Array2D_CUDA::onef = 1.0f;
-float Array2D_CUDA::zerof = 0.0f;
 
 #endif
