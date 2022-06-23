@@ -9,6 +9,9 @@
 #include <numeric>
 #include <string>
 
+constexpr float Array2D_CUDA::onef;
+constexpr float Array2D_CUDA::zerof;
+
 struct Suggestion
 {
     size_t index;
